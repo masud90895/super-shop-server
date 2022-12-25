@@ -71,6 +71,14 @@ async function run() {
     });
 
 
+    // ladiesBagCollection
+
+    app.get("/ladiesBag", async (req, res) => {
+      const result = await ladiesBagCollection.find({}).toArray();
+      res.send(result);
+    });
+
+
 
 
 
