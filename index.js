@@ -55,6 +55,21 @@ async function run() {
       const result = await summerCollection.find({}).toArray();
       res.send(result);
     });
+
+    // electronicCollection
+
+    app.get("/electronic", async (req, res) => {
+      const result = await electronicCollection.find({}).toArray();
+      res.send(result);
+    });
+
+
+
+
+
+
+
+
   } finally {
     // await client.close();
   }
