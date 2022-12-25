@@ -63,7 +63,12 @@ async function run() {
       res.send(result);
     });
 
+    // women collection 
 
+    app.get("/women", async (req, res) => {
+      const result = await womensCollection.find({}).toArray();
+      res.send(result);
+    });
 
 
 
