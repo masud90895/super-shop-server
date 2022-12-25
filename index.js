@@ -24,7 +24,6 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Create Database to store Data
-    const categoryCollection = client.db("supershop").collection("category");
     const todayDealsCollection = client
       .db("supershop")
       .collection("todayDeals");
@@ -70,14 +69,12 @@ async function run() {
       res.send(result);
     });
 
-
     // ladiesBagCollection
 
     app.get("/ladiesBag", async (req, res) => {
       const result = await ladiesBagCollection.find({}).toArray();
       res.send(result);
     });
-
 
     // globalProductsCollection
 
@@ -86,6 +83,12 @@ async function run() {
       res.send(result);
     });
 
+    //shareeCollection
+
+    app.get("/sharee", async (req, res) => {
+      const result = await shareeCollection.find({}).toArray();
+      res.send(result);
+    });
 
 
 
