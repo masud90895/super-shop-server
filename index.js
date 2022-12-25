@@ -79,6 +79,14 @@ async function run() {
     });
 
 
+    // globalProductsCollection
+
+    app.get("/globalProducts", async (req, res) => {
+      const result = await globalProductsCollection.find({}).toArray();
+      res.send(result);
+    });
+
+
 
 
 
