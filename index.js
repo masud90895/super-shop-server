@@ -90,7 +90,12 @@ async function run() {
       res.send(result);
     });
 
+    //smartphoneCollection
 
+    app.get("/smartphone", async (req, res) => {
+      const result = await smartphoneCollection.find({}).toArray();
+      res.send(result);
+    });
 
 
 
