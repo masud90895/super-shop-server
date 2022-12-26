@@ -49,6 +49,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/todayDeals/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await todayDealsCollection.findOne({_id: ObjectId(id)})
+      res.send(result);
+    });
+
     // summer collection
     app.get("/summer", async (req, res) => {
       const result = await summerCollection.find({}).toArray();
