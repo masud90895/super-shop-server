@@ -85,6 +85,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/women/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await womensCollection.findOne({_id: ObjectId(id)})
+      res.send(result);
+    });
+
     // ladiesBagCollection
 
     app.get("/ladiesBag", async (req, res) => {
