@@ -40,7 +40,6 @@ async function run() {
     const smartphoneCollection = client
       .db("supershop")
       .collection("smartphone");
-    const foryouCollection = client.db("supershop").collection("foryou");
 
     // today deal
 
@@ -58,6 +57,11 @@ async function run() {
     // summer collection
     app.get("/summer", async (req, res) => {
       const result = await summerCollection.find({}).toArray();
+      res.send(result);
+    });
+    app.get("/summer/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await summerCollection.findOne({_id: ObjectId(id)})
       res.send(result);
     });
 
