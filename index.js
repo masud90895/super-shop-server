@@ -103,6 +103,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/smartphone/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await smartphoneCollection.findOne({_id: ObjectId(id)})
+      res.send(result);
+    });
+
 
 
   } finally {
