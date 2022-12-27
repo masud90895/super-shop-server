@@ -124,6 +124,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/sharee/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await shareeCollection.findOne({_id: ObjectId(id)})
+      res.send(result);
+    });
+
     //smartphoneCollection
 
     app.get("/smartphone", async (req, res) => {
