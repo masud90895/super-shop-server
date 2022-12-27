@@ -98,6 +98,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/ladiesBag/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await ladiesBagCollection.findOne({_id: ObjectId(id)})
+      res.send(result);
+    });
+
     // globalProductsCollection
 
     app.get("/globalProducts", async (req, res) => {
