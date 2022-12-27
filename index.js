@@ -111,6 +111,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/globalProducts/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await globalProductsCollection.findOne({_id: ObjectId(id)})
+      res.send(result);
+    });
+
     //shareeCollection
 
     app.get("/sharee", async (req, res) => {
