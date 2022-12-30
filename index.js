@@ -24,127 +24,93 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Create Database to store Data
-    const todayDealsCollection = client
-      .db("supershop")
-      .collection("todayDeals");
-    const summerCollection = client.db("supershop").collection("summer");
-    const electronicCollection = client
-      .db("supershop")
-      .collection("electronic");
-    const womensCollection = client.db("supershop").collection("womens");
-    const ladiesBagCollection = client.db("supershop").collection("ladiesBag");
-    const globalProductsCollection = client
-      .db("supershop")
-      .collection("globalProducts");
-    const shareeCollection = client.db("supershop").collection("sharee");
-    const smartphoneCollection = client
-      .db("supershop")
-      .collection("smartphone");
+    // products
+    const productsCollection = client.db("supershop").collection("products");
+
+    app.get("/allproducts", async (req, res) => {
+      const category = req.query.category;
+      const result = await productsCollection
+        .find({ collections: category })
+        .toArray();
+      res.send(result);
+    });
+
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await productsCollection.findOne({ _id: ObjectId(id) });
+      res.send(result);
+    });
 
     // today deal
 
     app.get("/todayDeals", async (req, res) => {
-      const result = await todayDealsCollection.find({}).toArray();
-      res.send(result);
-    });
-
-    app.get("/todayDeals/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await todayDealsCollection.findOne({_id: ObjectId(id)})
+      const result = await productsCollection
+        .find({ collections: "Today'sDeals" })
+        .toArray();
       res.send(result);
     });
 
     // summer collection
     app.get("/summer", async (req, res) => {
-      const result = await summerCollection.find({}).toArray();
-      res.send(result);
-    });
-    app.get("/summer/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await summerCollection.findOne({_id: ObjectId(id)})
+      const result = await productsCollection
+        .find({ collections: "Summercollections" })
+        .toArray();
       res.send(result);
     });
 
     // electronicCollection
 
     app.get("/electronic", async (req, res) => {
-      const result = await electronicCollection.find({}).toArray();
+      const result = await productsCollection
+        .find({ collections: "Electronics" })
+        .toArray();
       res.send(result);
     });
-    app.get("/electronic/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await electronicCollection.findOne({_id: ObjectId(id)})
-      res.send(result);
-    });
-    
 
-    // women collection 
+    // women collection
 
     app.get("/women", async (req, res) => {
-      const result = await womensCollection.find({}).toArray();
-      res.send(result);
-    });
-
-    app.get("/women/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await womensCollection.findOne({_id: ObjectId(id)})
+      const result = await productsCollection
+        .find({ collections: "Women'sCollection" })
+        .toArray();
       res.send(result);
     });
 
     // ladiesBagCollection
 
     app.get("/ladiesBag", async (req, res) => {
-      const result = await ladiesBagCollection.find({}).toArray();
-      res.send(result);
-    });
-
-    app.get("/ladiesBag/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await ladiesBagCollection.findOne({_id: ObjectId(id)})
+      const result = await productsCollection
+        .find({ collections: "LadiesBagCollections" })
+        .toArray();
       res.send(result);
     });
 
     // globalProductsCollection
 
     app.get("/globalProducts", async (req, res) => {
-      const result = await globalProductsCollection.find({}).toArray();
-      res.send(result);
-    });
-
-    app.get("/globalProducts/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await globalProductsCollection.findOne({_id: ObjectId(id)})
+      const result = await productsCollection
+        .find({ collections: "GlobalProducts" })
+        .toArray();
       res.send(result);
     });
 
     //shareeCollection
 
     app.get("/sharee", async (req, res) => {
-      const result = await shareeCollection.find({}).toArray();
-      res.send(result);
-    });
-
-    app.get("/sharee/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await shareeCollection.findOne({_id: ObjectId(id)})
+      const result = await productsCollection
+        .find({ collections: "Sharee'sCollection" })
+        .toArray();
       res.send(result);
     });
 
     //smartphoneCollection
 
     app.get("/smartphone", async (req, res) => {
-      const result = await smartphoneCollection.find({}).toArray();
+      const result = await productsCollection
+        .find({ collections: "SmartPhoneCollection" })
+        .toArray();
       res.send(result);
     });
-
-    app.get("/smartphone/:id", async (req, res) => {
-      const id = req.params.id;
-      const result = await smartphoneCollection.findOne({_id: ObjectId(id)})
-      res.send(result);
-    });
-
-
-
   } finally {
     // await client.close();
   }
