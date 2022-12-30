@@ -26,6 +26,7 @@ async function run() {
     // Create Database to store Data
     // products
     const productsCollection = client.db("supershop").collection("products");
+    const userCollection = client.db("supershop").collection("user")
 
     app.get("/allproducts", async (req, res) => {
       const category = req.query.category;
@@ -111,6 +112,25 @@ async function run() {
         .toArray();
       res.send(result);
     });
+
+      //user collection
+
+      app.post("/user", async (req, res) => {
+        const result = await usersCollection.insertOne(req.body)
+        if(result.insertedId){
+          res.send(result)
+        }
+      });
+
+
+
+
+
+
+
+
+
+
   } finally {
     // await client.close();
   }
