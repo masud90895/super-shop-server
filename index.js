@@ -26,7 +26,7 @@ async function run() {
     // Create Database to store Data
     // products
     const productsCollection = client.db("supershop").collection("products");
-    const userCollection = client.db("supershop").collection("user")
+    const userCollection = client.db("supershop").collection("user");
 
     app.get("/allproducts", async (req, res) => {
       const category = req.query.category;
@@ -113,24 +113,20 @@ async function run() {
       res.send(result);
     });
 
-      //user collection
+    //user collection
 
-      app.post("/user", async (req, res) => {
-        const result = await usersCollection.insertOne(req.body)
-        if(result.insertedId){
-          res.send(result)
-        }
-      });
+    app.post("/user", async (req, res) => {
+      const result = await userCollection.insertOne(req.body);
+      if (result.insertedId) {
+        res.send(result);
+      }
+    });
 
-
-
-
-
-
-
-
-
-
+    app.get("/user", async (req, res) => {
+      const email = req.query.email;
+      const result = await userCollection.findOne({ email: email });
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
