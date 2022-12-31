@@ -141,14 +141,6 @@ async function run() {
       }
     });
 
-    // buyProductCollection
-    app.post("/buyProduct", async (req, res) => {
-      const result = await buyProductCollection.insertOne(req.body);
-      if (result.insertedId) {
-        res.send(result);
-      }
-    });
-
     // report products
 
     app.put("/report/:id", async (req, res) => {
@@ -157,6 +149,21 @@ async function run() {
       const result = await productsCollection.updateOne(
         { _id: ObjectId(id) },
         { $set: req.body }
+      );
+
+      if (result.matchedCount) {
+        res.send(result);
+      }
+    });
+
+    // products question
+
+    app.post("/question/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const result = await productsCollection.updateOne(
+        { _id: ObjectId(id) },
+        { $push: { question: req.body } }
       );
 
       if (result.matchedCount) {
