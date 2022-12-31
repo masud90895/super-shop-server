@@ -28,7 +28,9 @@ async function run() {
     const productsCollection = client.db("supershop").collection("products");
     const userCollection = client.db("supershop").collection("user");
     const addToCartCollection = client.db("supershop").collection("addToCart");
-    const buyProductCollection = client.db("supershop").collection("buyProduct");
+    const buyProductCollection = client
+      .db("supershop")
+      .collection("buyProduct");
 
     app.get("/allproducts", async (req, res) => {
       const category = req.query.category;
@@ -147,6 +149,20 @@ async function run() {
       }
     });
 
+    // report products
+
+    app.put("/report/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const result = await productsCollection.updateOne(
+        { _id: ObjectId(id) },
+        { $set: req.body }
+      );
+
+      if (result.matchedCount) {
+        res.send(result);
+      }
+    });
   } finally {
     // await client.close();
   }
