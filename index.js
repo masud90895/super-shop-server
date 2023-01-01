@@ -204,6 +204,13 @@ async function run() {
       const result = await userCollection.find({ role: "seller" }).toArray();
       res.send(result);
     });
+
+    //all buyer
+
+    app.get("/allBuyer", async (req, res) => {
+      const result = await userCollection.find({ role: "user" }).toArray();
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
