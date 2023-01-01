@@ -28,6 +28,7 @@ async function run() {
     const productsCollection = client.db("supershop").collection("products");
     const userCollection = client.db("supershop").collection("user");
     const addToCartCollection = client.db("supershop").collection("addToCart");
+    const sellerRequestCollection = client.db("supershop").collection("sellerRequest")
     const buyProductCollection = client
       .db("supershop")
       .collection("buyProduct");
@@ -141,6 +142,12 @@ async function run() {
       }
     });
 
+    app.get("/addToCart", async (req, res) => {
+      const email = req.query.email;
+      const result = await addToCartCollection.find({email : email}).toArray();
+      res.send(result);
+    });
+
     // report products
 
     app.put("/report/:id", async (req, res) => {
@@ -170,6 +177,28 @@ async function run() {
         res.send(result);
       }
     });
+
+
+    // seller request 
+    app.post("/sellerRequest", async (req, res) => {
+
+      const email = req.body.email;
+      const matchEmail = await sellerRequestCollection.findOne({email : email})
+      if(matchEmail?.email === email){
+       return res.send("already Requested!");
+      }
+     
+      const result = await sellerRequestCollection.insertOne(req.body);
+      if (result.insertedId) {
+        res.send(result);
+      }
+    });
+
+    
+
+
+
+
   } finally {
     // await client.close();
   }
