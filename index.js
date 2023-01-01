@@ -165,6 +165,11 @@ async function run() {
       }
     });
 
+    app.get("/report", async (req, res) => {
+      const result = await productsCollection.find({ report: true }).toArray();
+      res.send(result);
+    });
+
     // products question
 
     app.post("/question/:id", async (req, res) => {
@@ -198,6 +203,12 @@ async function run() {
       }
     });
 
+    app.get("/sellerRequest", async (req, res) => {
+
+      const result = await sellerRequestCollection.find({}).toArray()
+      res.send(result);
+    })
+
     // all seller
 
     app.get("/allSeller", async (req, res) => {
@@ -211,6 +222,12 @@ async function run() {
       const result = await userCollection.find({ role: "user" }).toArray();
       res.send(result);
     });
+
+
+
+
+
+
   } finally {
     // await client.close();
   }
