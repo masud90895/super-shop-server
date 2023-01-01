@@ -28,7 +28,9 @@ async function run() {
     const productsCollection = client.db("supershop").collection("products");
     const userCollection = client.db("supershop").collection("user");
     const addToCartCollection = client.db("supershop").collection("addToCart");
-    const sellerRequestCollection = client.db("supershop").collection("sellerRequest")
+    const sellerRequestCollection = client
+      .db("supershop")
+      .collection("sellerRequest");
     const buyProductCollection = client
       .db("supershop")
       .collection("buyProduct");
@@ -144,7 +146,7 @@ async function run() {
 
     app.get("/addToCart", async (req, res) => {
       const email = req.query.email;
-      const result = await addToCartCollection.find({email : email}).toArray();
+      const result = await addToCartCollection.find({ email: email }).toArray();
       res.send(result);
     });
 
@@ -178,27 +180,30 @@ async function run() {
       }
     });
 
-
-    // seller request 
+    // seller request
     app.post("/sellerRequest", async (req, res) => {
-
       const email = req.body.email;
-      const matchEmail = await sellerRequestCollection.findOne({email : email})
-      if(matchEmail?.email === email){
-       return res.send("already Requested!");
+      const matchEmail = await sellerRequestCollection.findOne({
+        email: email,
+      });
+      if (matchEmail?.email === email) {
+        return res
+          .status(401)
+          .send({ status: 401, message: "already Requested!" });
       }
-     
+
       const result = await sellerRequestCollection.insertOne(req.body);
       if (result.insertedId) {
-        res.send(result);
+        res.send({ message: "Request Send Successful!" });
       }
     });
 
-    
+    // all seller
 
-
-
-
+    app.get("/allSeller", async (req, res) => {
+      const result = await userCollection.find({ role: "seller" }).toArray();
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
