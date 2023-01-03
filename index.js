@@ -285,8 +285,11 @@ async function run() {
       }
     })
 
-
-
+    app.get("/success/:id", async (req, res) => {
+      const {id} = req.params;
+      const result = await buyProductCollection.findOne({transactionId : id});
+      res.send(result);
+    })
     // ssl commerse end 
   } finally {
     // await client.close();
