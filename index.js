@@ -231,9 +231,9 @@ async function run() {
     //ssl commercse
 
     app.post("/buyProducts", async (req, res) => {
-      const order= req.body;
-      
-      const transactionId = new ObjectId().toString()
+      const order = req.body;
+
+      const transactionId = new ObjectId().toString();
       const data = {
         total_amount: order.price,
         currency: order.currency,
@@ -271,26 +271,41 @@ async function run() {
         buyProductCollection.insertOne({
           ...order,
           transactionId,
-          paid : false
-        })
-        res.send({url : GatewayPageURL});
+          paid: false,
+        });
+        res.send({ url: GatewayPageURL });
       });
     });
 
-    app.post("/success",async (req, res) => {
-      const {transactionId} = req.query;
-      const result =await buyProductCollection.updateOne({transactionId},{$set : {paid : true, paidTime : new Date()}});
-      if(result.modifiedCount > 0){
-        res.redirect(`http://localhost:3000/success?transactionId=${transactionId}`)
+    app.post("/success", async (req, res) => {
+      const { transactionId } = req.query;
+      const result = await buyProductCollection.updateOne(
+        { transactionId },
+        { $set: { paid: true, paidTime: new Date().toLocaleString() } }
+      );
+      if (result.modifiedCount > 0) {
+        res.redirect(
+          `http://localhost:3000/success?transactionId=${transactionId}`
+        );
       }
-    })
+    });
 
     app.get("/success/:id", async (req, res) => {
-      const {id} = req.params;
-      const result = await buyProductCollection.findOne({transactionId : id});
+      const { id } = req.params;
+      const result = await buyProductCollection.findOne({ transactionId: id });
+      res.send(result);
+    });
+    // ssl commerse end
+
+    app.get('tackOrder',async (req, res) => {
+      const result = await buyProductCollection.findOne({paid : true}).toArray()
       res.send(result);
     })
-    // ssl commerse end 
+
+
+
+
+
   } finally {
     // await client.close();
   }
