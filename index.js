@@ -6,6 +6,12 @@ const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
+// ssl commerce
+const SSLCommerzPayment = require("sslcommerz-lts");
+const store_id = process.env.STORE_ID;
+const store_passwd = process.env.STORE_PASSWORD;
+const is_live = false; //true for live, false for sandbox
+
 // used Middleware
 app.use(cors());
 // backend to client data sent
@@ -204,10 +210,9 @@ async function run() {
     });
 
     app.get("/sellerRequest", async (req, res) => {
-
-      const result = await sellerRequestCollection.find({}).toArray()
+      const result = await sellerRequestCollection.find({}).toArray();
       res.send(result);
-    })
+    });
 
     // all seller
 
@@ -223,11 +228,66 @@ async function run() {
       res.send(result);
     });
 
+    //ssl commercse
+
+    app.post("/buyProducts", async (req, res) => {
+      const order= req.body;
+      
+      const transactionId = new ObjectId().toString()
+      const data = {
+        total_amount: order.price,
+        currency: order.currency,
+        tran_id: transactionId, // use unique tran_id for each api call
+        success_url: `${process.env.PATH_LOCATION}/success?transactionId=${transactionId}`,
+        fail_url: `${process.env.PATH_LOCATION}/fail`,
+        cancel_url: `${process.env.PATH_LOCATION}/cancel`,
+        ipn_url: "http://localhost:3030/ipn",
+        shipping_method: "Courier",
+        product_name: order.productName,
+        product_category: order.productCatagory,
+        product_profile: "general",
+        cus_name: order.name,
+        cus_email: order.email,
+        cus_add1: order.address,
+        cus_add2: "Dhaka",
+        cus_city: "Dhaka",
+        cus_state: "Dhaka",
+        cus_postcode: "1000",
+        cus_country: "Bangladesh",
+        cus_phone: order.number,
+        cus_fax: "01711111111",
+        ship_name: order.name,
+        ship_add1: "Dhaka",
+        ship_add2: "Dhaka",
+        ship_city: "Dhaka",
+        ship_state: "Dhaka",
+        ship_postcode: 1000,
+        ship_country: "Bangladesh",
+      };
+      const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+      sslcz.init(data).then((apiResponse) => {
+        // Redirect the user to payment gateway
+        let GatewayPageURL = apiResponse.GatewayPageURL;
+        buyProductCollection.insertOne({
+          ...order,
+          transactionId,
+          paid : false
+        })
+        res.send({url : GatewayPageURL});
+      });
+    });
+
+    app.post("/success",async (req, res) => {
+      const {transactionId} = req.query;
+      const result =await buyProductCollection.updateOne({transactionId},{$set : {paid : true, paidTime : new Date()}});
+      if(result.modifiedCount > 0){
+        res.redirect(`http://localhost:3000/success?transactionId=${transactionId}`)
+      }
+    })
 
 
 
-
-
+    // ssl commerse end 
   } finally {
     // await client.close();
   }
