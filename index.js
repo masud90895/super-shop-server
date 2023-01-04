@@ -210,7 +210,7 @@ async function run() {
     });
 
     app.get("/sellerRequest", async (req, res) => {
-      const result = await sellerRequestCollection.find({}).toArray();
+      const result = await sellerRequestCollection.find({role : "unknown"}).toArray();
       res.send(result);
     });
 
@@ -297,14 +297,15 @@ async function run() {
     });
     // ssl commerse end
 
-    app.get('tackOrder',async (req, res) => {
-      const result = await buyProductCollection.findOne({paid : true}).toArray()
+    app.get("/tackOrder", async (req, res) => {
+      const email = req.query.email;
+      const result = await buyProductCollection
+        .find({ email: email, paid: true })
+        .toArray();
       res.send(result);
-    })
+    });
 
-
-
-
+    // seller approved
 
   } finally {
     // await client.close();
