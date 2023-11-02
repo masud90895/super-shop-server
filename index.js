@@ -41,6 +41,15 @@ async function run() {
       .db("supershop")
       .collection("buyProduct");
 
+    // post product
+    app.post("/postProduct", async (req, res) => {
+      const result = await productsCollection.insertOne(req.body);
+      if (result.insertedId) {
+        res.send(result);
+      }
+    }
+    );
+
     app.get("/allproducts", async (req, res) => {
       const category = req.query.category;
       const result = await productsCollection
@@ -210,7 +219,7 @@ async function run() {
     });
 
     app.get("/sellerRequest", async (req, res) => {
-      const result = await sellerRequestCollection.find({role : "unknown"}).toArray();
+      const result = await sellerRequestCollection.find({ role: "unknown" }).toArray();
       res.send(result);
     });
 
