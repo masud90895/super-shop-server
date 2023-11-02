@@ -50,6 +50,15 @@ async function run() {
     }
     );
 
+    // get all product
+    app.get("/products", async (req, res) => {
+      const result = await productsCollection.find({}).toArray();
+      res.send(result);
+    });
+
+
+
+
     app.get("/allproducts", async (req, res) => {
       const category = req.query.category;
       const result = await productsCollection
@@ -63,6 +72,17 @@ async function run() {
       const result = await productsCollection.findOne({ _id: ObjectId(id) });
       res.send(result);
     });
+
+    // delete product
+    app.delete("/deleteProduct/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await productsCollection.deleteOne({
+        _id: new ObjectId(id),
+      });
+      if (result.deletedCount) {
+        res.send(result);
+      }
+    })
 
     // today deal
 
