@@ -52,7 +52,7 @@ async function run() {
 
     // get all product
     app.get("/products", async (req, res) => {
-      const result = await productsCollection.find({}).toArray();
+      const result = await (await productsCollection.find({}).toArray()).reverse();
       res.send(result);
     });
 
@@ -60,7 +60,7 @@ async function run() {
       const category = req.query.category;
       const result = await productsCollection
         .find({ collections: category })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
@@ -86,7 +86,7 @@ async function run() {
     app.get("/todayDeals", async (req, res) => {
       const result = await productsCollection
         .find({ collections: "Today'sDeals" })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
@@ -94,7 +94,7 @@ async function run() {
     app.get("/summer", async (req, res) => {
       const result = await productsCollection
         .find({ collections: "Summercollections" })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
@@ -103,7 +103,7 @@ async function run() {
     app.get("/electronic", async (req, res) => {
       const result = await productsCollection
         .find({ collections: "Electronics" })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
@@ -112,7 +112,7 @@ async function run() {
     app.get("/women", async (req, res) => {
       const result = await productsCollection
         .find({ collections: "Women'sCollection" })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
@@ -121,7 +121,7 @@ async function run() {
     app.get("/ladiesBag", async (req, res) => {
       const result = await productsCollection
         .find({ collections: "LadiesBagCollections" })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
@@ -130,7 +130,7 @@ async function run() {
     app.get("/globalProducts", async (req, res) => {
       const result = await productsCollection
         .find({ collections: "GlobalProducts" })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
@@ -139,7 +139,7 @@ async function run() {
     app.get("/sharee", async (req, res) => {
       const result = await productsCollection
         .find({ collections: "Sharee'sCollection" })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
@@ -148,7 +148,7 @@ async function run() {
     app.get("/smartphone", async (req, res) => {
       const result = await productsCollection
         .find({ collections: "SmartPhoneCollection" })
-        .toArray();
+        .toArray().reverse();
       res.send(result);
     });
 
