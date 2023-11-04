@@ -2,7 +2,7 @@ const { MongoClient, ObjectId, ServerApiVersion } = require("mongodb");
 const express = require("express");
 const cors = require("cors");
 const app = express();
-//gitignor
+//gitignore
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
@@ -17,7 +17,7 @@ app.use(cors());
 // backend to client data sent
 app.use(express.json());
 
-// Connact With MongoDb Database
+// Connect With MongoDb Database
 const uri =
   "mongodb+srv://supershop:supershop@cluster0.2vi6qur.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -26,7 +26,7 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-// Create a async fucntion to all others activity
+// Create a async function to all others activity
 async function run() {
   try {
     // Create Database to store Data
@@ -42,7 +42,7 @@ async function run() {
       .collection("buyProduct");
 
     // post product
-    app.post("/postProduct", async (req, res) => {
+    app.post("/products", async (req, res) => {
       const result = await productsCollection.insertOne(req.body);
       if (result.insertedId) {
         res.send(result);
@@ -55,9 +55,6 @@ async function run() {
       const result = await productsCollection.find({}).toArray();
       res.send(result);
     });
-
-
-
 
     app.get("/allproducts", async (req, res) => {
       const category = req.query.category;
@@ -74,7 +71,7 @@ async function run() {
     });
 
     // delete product
-    app.delete("/deleteProduct/:id", async (req, res) => {
+    app.delete("/products/:id", async (req, res) => {
       const id = req.params.id;
       const result = await productsCollection.deleteOne({
         _id: new ObjectId(id),
@@ -137,7 +134,7 @@ async function run() {
       res.send(result);
     });
 
-    //shareeCollection
+    //shareCollection
 
     app.get("/sharee", async (req, res) => {
       const result = await productsCollection
@@ -267,9 +264,9 @@ async function run() {
         total_amount: order.price,
         currency: order.currency,
         tran_id: transactionId, // use unique tran_id for each api call
-        success_url: `${process.env.PATH_LOCATION}/success?transactionId=${transactionId}`,
-        fail_url: `${process.env.PATH_LOCATION}/fail`,
-        cancel_url: `${process.env.PATH_LOCATION}/cancel`,
+        success_url: `https://supershop-cc520.web.app/success?transactionId=${transactionId}`,
+        fail_url: `https://supershop-cc520.web.app/fail`,
+        cancel_url: `https://supershop-cc520.web.app/cancel`,
         ipn_url: "http://localhost:3030/ipn",
         shipping_method: "Courier",
         product_name: order.productName,
@@ -314,7 +311,7 @@ async function run() {
       );
       if (result.modifiedCount > 0) {
         res.redirect(
-          `http://localhost:3000/success?transactionId=${transactionId}`
+          `https://supershop-cc520.web.app/success?transactionId=${transactionId}`
         );
       }
     });
